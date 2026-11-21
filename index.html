@@ -1,0 +1,1521 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOCUS.</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root{
+  --bg:#000;
+  --surface:#101010;
+  --surface2:#151515;
+  --border:#252525;
+  --white:#fff;
+  --gray:#777;
+  --red:#ef4444;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+button,input{font:inherit}
+button{cursor:pointer}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.app{
+  width:min(92%,1100px);
+  margin:auto;
+  padding:55px 0 100px;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  min-height:52px;
+}
+
+.logo{
+  position:absolute;
+  left:0;
+  font-size:12px;
+  letter-spacing:4px;
+  font-weight:900;
+  color:#777;
+}
+
+/* =========================
+   MODE SWITCH
+========================= */
+
+.mode-switch{
+  display:flex;
+  padding:4px;
+  background:#111;
+  border:1px solid #252525;
+  border-radius:50px;
+}
+
+.mode-switch button{
+  border:0;
+  background:transparent;
+  color:#777;
+  border-radius:50px;
+  padding:12px 23px;
+  font-size:13px;
+  transition:.2s;
+}
+
+.mode-switch button:hover{
+  color:white;
+}
+
+.mode-switch button.active{
+  background:white;
+  color:black;
+  font-weight:800;
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+.settings-wrapper{
+  position:absolute;
+  right:0;
+}
+
+.settings-button{
+  background:transparent;
+  border:0;
+  color:#777;
+  font-size:20px;
+  transition:.2s;
+}
+
+.settings-button:hover{
+  color:white;
+  transform:rotate(30deg);
+}
+
+.settings-panel{
+  display:none;
+  position:absolute;
+  right:0;
+  top:42px;
+  z-index:20;
+  background:#111;
+  border:1px solid #2b2b2b;
+  border-radius:12px;
+  width:230px;
+  padding:18px;
+}
+
+.settings-panel.open{display:block}
+
+.settings-panel label{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:12px;
+  color:#aaa;
+  margin-bottom:15px;
+}
+
+.settings-panel input{
+  width:68px;
+  background:#080808;
+  color:white;
+  border:1px solid #333;
+  border-radius:6px;
+  padding:8px;
+  outline:none;
+}
+
+.save-settings{
+  width:100%;
+  background:white;
+  color:black;
+  border:0;
+  border-radius:7px;
+  padding:10px;
+  font-size:12px;
+  font-weight:800;
+}
+
+/* =========================
+   TIMER
+========================= */
+
+.timer-section{
+  text-align:center;
+  padding:120px 0 105px;
+}
+
+.timer-label{
+  font-size:11px;
+  letter-spacing:4px;
+  color:#777;
+  text-transform:uppercase;
+  margin-bottom:26px;
+}
+
+.timer{
+  font-size:clamp(100px,19vw,230px);
+  font-weight:900;
+  letter-spacing:-11px;
+  line-height:.95;
+  color:white;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+
+.timer-subtitle{
+  margin-top:28px;
+  color:#777;
+  font-size:14px;
+}
+
+.timer-subtitle span{
+  padding:0 10px;
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  margin-top:45px;
+}
+
+.control-button{
+  height:58px;
+  padding:0 30px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:700;
+  transition:.2s;
+}
+
+.start-button{
+  min-width:180px;
+  background:white;
+  color:black;
+  border:1px solid white;
+}
+
+.start-button:hover{background:#ddd}
+
+.secondary-button{
+  background:#080808;
+  border:1px solid #333;
+  color:white;
+}
+
+.secondary-button:hover{
+  background:#171717;
+  border-color:#555;
+}
+
+.reset-button{
+  width:58px;
+  padding:0;
+  font-size:19px;
+}
+
+/* =========================
+   EXAM SELECT BUTTON
+========================= */
+
+.exam-select-btn{
+  display:none;
+  width:min(480px,90%);
+  margin:35px auto 20px;
+  padding:17px 20px;
+  border-radius:12px;
+  background:#0b0b0b;
+  color:white;
+  border:1px solid #303030;
+  font-weight:700;
+  font-size:14px;
+  transition:.2s;
+}
+
+.exam-select-btn:hover{
+  background:#171717;
+  border-color:#555;
+}
+
+.exam-mode .exam-select-btn{display:block}
+
+.exam-mode .timer-section{
+  padding-top:85px;
+}
+
+/* =========================
+   TASKS
+========================= */
+
+.tasks-section{
+  border-top:1px solid #222;
+  padding-top:45px;
+}
+
+.tasks-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:25px;
+}
+
+.tasks-heading h2{
+  font-size:24px;
+  font-weight:800;
+  letter-spacing:-.8px;
+}
+
+.task-count{
+  color:#666;
+  font-size:12px;
+}
+
+.add-task{
+  display:flex;
+  gap:10px;
+  margin-bottom:25px;
+}
+
+.add-task input{
+  flex:1;
+  min-width:0;
+  background:#080808;
+  border:1px solid #333;
+  border-radius:10px;
+  padding:15px;
+  color:white;
+  outline:none;
+  font-size:13px;
+  transition:.2s;
+}
+
+.add-task input:focus{border-color:#777}
+.add-task input::placeholder{color:#777}
+
+.add-task button{
+  background:white;
+  color:black;
+  border:0;
+  border-radius:10px;
+  padding:0 25px;
+  font-size:13px;
+  font-weight:800;
+  transition:.2s;
+}
+
+.add-task button:hover{background:#ddd}
+
+.task-list{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+}
+
+.task-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:#080808;
+  border:1px solid #202020;
+  border-radius:10px;
+  padding:14px 15px;
+  min-height:64px;
+  transition:.2s;
+}
+
+.task-item:hover{
+  background:#101010;
+  border-color:#303030;
+}
+
+.task-item.dragging{opacity:.35}
+.task-item.drag-over{border-top:2px solid white}
+
+.drag-handle{
+  color:#555;
+  cursor:grab;
+  font-size:17px;
+  user-select:none;
+}
+
+.drag-handle:active{cursor:grabbing}
+
+.task-checkbox{
+  appearance:none;
+  width:18px;
+  height:18px;
+  border:1px solid #555;
+  border-radius:5px;
+  background:transparent;
+  cursor:pointer;
+  position:relative;
+  flex-shrink:0;
+}
+
+.task-checkbox:checked{
+  background:white;
+  border-color:white;
+}
+
+.task-checkbox:checked::after{
+  content:"✓";
+  position:absolute;
+  color:black;
+  font-size:12px;
+  font-weight:900;
+  left:3px;
+  top:0;
+}
+
+.task-text{
+  flex:1;
+  min-width:0;
+  color:#eee;
+  font-size:13px;
+  overflow-wrap:anywhere;
+}
+
+.task-item.completed .task-text{
+  color:#555;
+  text-decoration:line-through;
+}
+
+.task-actions{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.task-action{
+  width:36px;
+  height:36px;
+  border-radius:8px;
+  background:transparent;
+  border:0;
+  color:#777;
+  display:grid;
+  place-items:center;
+  transition:.2s;
+}
+
+.task-action svg{
+  width:17px;
+  height:17px;
+}
+
+.edit-task:hover{
+  background:#222;
+  color:white;
+}
+
+.delete-task:hover{
+  background:#351212;
+  color:var(--red);
+}
+
+.empty-state{
+  text-align:center;
+  color:#555;
+  padding:30px 10px;
+  font-size:13px;
+}
+
+/* =========================
+   EXAM POPUP
+========================= */
+
+.modal-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(7px);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal-overlay.open{display:flex}
+
+.modal{
+  background:#111;
+  border:1px solid #2b2b2b;
+  border-radius:18px;
+  width:100%;
+  max-width:500px;
+  max-height:85vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.modal-header{
+  padding:23px 22px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.modal-header h2{
+  font-size:18px;
+  font-weight:800;
+}
+
+.modal-close{
+  background:none;
+  border:0;
+  color:#777;
+  font-size:24px;
+  padding:5px 10px;
+}
+
+.modal-close:hover{color:white}
+
+.exam-search{padding:0 20px 15px}
+
+.exam-search input{
+  width:100%;
+  padding:13px;
+  background:#080808;
+  border:1px solid #2a2a2a;
+  border-radius:9px;
+  color:white;
+  outline:none;
+  font-size:13px;
+}
+
+.exam-search input:focus{border-color:#666}
+
+.exam-list{
+  overflow-y:auto;
+  padding:0 12px 15px;
+}
+
+.exam-option{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 12px;
+  border:0;
+  border-bottom:1px solid #222;
+  background:transparent;
+  color:white;
+  text-align:left;
+  border-radius:8px;
+  gap:12px;
+}
+
+.exam-option:hover{background:#1c1c1c}
+
+.exam-name{
+  font-size:13px;
+  font-weight:600;
+}
+
+.exam-duration{
+  font-size:12px;
+  color:#777;
+  white-space:nowrap;
+}
+
+.exam-option.selected{background:#1b1b1b}
+
+.modal-footer{
+  padding:16px 20px;
+  border-top:1px solid #252525;
+  color:#666;
+  font-size:11px;
+  text-align:center;
+}
+
+/* =========================
+   CLOCK MODE
+========================= */
+
+.clock-mode .timer{
+  letter-spacing:-9px;
+}
+
+/* =========================
+   LARGE SCREENS
+========================= */
+
+@media(min-width:1400px){
+  .app{
+    max-width:1150px;
+    padding-top:65px;
+  }
+
+  .timer-section{
+    padding:140px 0 120px;
+  }
+
+  .timer{
+    font-size:clamp(160px,17vw,250px);
+  }
+
+  .tasks-section{padding-top:55px}
+  .task-item{min-height:70px}
+}
+
+/* =========================
+   LAPTOP / SMALL DESKTOP
+========================= */
+
+@media(max-width:1100px){
+  .app{width:90%}
+
+  .timer-section{
+    padding:100px 0 85px;
+  }
+
+  .timer{
+    font-size:clamp(120px,18vw,200px);
+    letter-spacing:-9px;
+  }
+}
+
+/* =========================
+   TABLET LANDSCAPE
+========================= */
+
+@media(min-width:700px) and (max-width:1100px) and (orientation:landscape){
+  .app{
+    width:88%;
+    padding-top:35px;
+  }
+
+  .timer-section{
+    padding:75px 0 70px;
+  }
+
+  .timer{
+    font-size:clamp(110px,16vw,180px);
+    letter-spacing:-8px;
+  }
+
+  .timer-label{margin-bottom:20px}
+  .timer-subtitle{margin-top:22px}
+  .controls{margin-top:32px}
+  .tasks-section{padding-top:35px}
+  .task-item{min-height:58px}
+}
+
+/* =========================
+   TABLET & MOBILE
+========================= */
+
+@media(max-width:699px){
+  .app{
+    width:92%;
+    padding:30px 0 65px;
+  }
+
+  .header{min-height:48px}
+  .logo{display:none}
+
+  .mode-switch{
+    max-width:100%;
+  }
+
+  .mode-switch button{
+    padding:11px 15px;
+    font-size:12px;
+  }
+
+  .settings-wrapper{
+    top:58px;
+    right:0;
+  }
+
+  .timer-section{
+    padding:100px 0 75px;
+  }
+
+  .timer-label{
+    margin-bottom:22px;
+    font-size:10px;
+    letter-spacing:3px;
+  }
+
+  .timer{
+    font-size:clamp(90px,21vw,150px);
+    letter-spacing:-6px;
+  }
+
+  .timer-subtitle{
+    margin-top:24px;
+    font-size:12px;
+  }
+
+  .controls{
+    margin-top:36px;
+    gap:10px;
+  }
+
+  .control-button{
+    height:52px;
+    padding:0 18px;
+    font-size:12px;
+  }
+
+  .start-button{min-width:120px}
+  .reset-button{width:52px;padding:0}
+
+  .tasks-section{padding-top:32px}
+  .tasks-heading{margin-bottom:20px}
+  .tasks-heading h2{font-size:21px}
+
+  .add-task{
+    margin-bottom:20px;
+    gap:8px;
+  }
+
+  .add-task input{
+    padding:13px;
+    font-size:12px;
+  }
+
+  .add-task button{
+    padding:0 18px;
+    font-size:12px;
+  }
+
+  .task-list{gap:9px}
+
+  .task-item{
+    min-height:58px;
+    padding:10px 11px;
+    gap:10px;
+  }
+
+  .task-text{font-size:12px}
+  .task-actions{gap:2px}
+  .task-action{width:31px;height:31px}
+
+  .exam-mode .timer-section{
+    padding-top:70px;
+    padding-bottom:75px;
+  }
+
+  .exam-select-btn{
+    margin-top:25px;
+    margin-bottom:18px;
+    width:100%;
+  }
+}
+
+/* =========================
+   PHONE
+========================= */
+
+@media(max-width:480px){
+  .app{
+    width:91%;
+    padding-top:25px;
+  }
+
+  .mode-switch{
+    padding:3px;
+    width:100%;
+  }
+
+  .mode-switch button{
+    flex:1;
+    padding:11px 6px;
+    font-size:11px;
+  }
+
+  .timer-section{
+    padding:90px 0 65px;
+  }
+
+  .timer{
+    font-size:clamp(75px,20vw,115px);
+    letter letter-spacing:-5px;
+  }
+
+  .timer-label{margin-bottom:18px}
+
+  .timer-subtitle{
+    margin-top:20px;
+    font-size:11px;
+  }
+
+  .controls{
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:30px;
+  }
+
+  .start-button{
+    flex:1;
+    min-width:110px;
+  }
+
+  #skip-button{flex:1}
+
+  .reset-button{
+    flex:0 0 48px;
+    width:48px;
+  }
+
+  .tasks-section{padding-top:27px}
+  .tasks-heading h2{font-size:19px}
+
+  .task-item{
+    min-height:55px;
+    gap:8px;
+    padding:9px;
+  }
+
+  .drag-handle{font-size:14px}
+  .task-checkbox{width:17px;height:17px}
+  .task-text{font-size:11px}
+
+  .task-action{
+    width:28px;
+    height:28px;
+  }
+
+  .task-action svg{
+    width:15px;
+    height:15px;
+  }
+
+  .exam-mode .timer-section{
+    padding:65px 0;
+  }
+
+  .exam-select-btn{
+    font-size:12px;
+    padding:14px;
+  }
+
+  .modal{
+    max-height:82vh;
+    border-radius:15px;
+  }
+}
+
+/* =========================
+   VERY SMALL PHONE
+========================= */
+
+@media(max-width:360px){
+  .mode-switch button{
+    font-size:10px;
+    padding:10px 4px;
+  }
+
+  .timer{
+    font-size:75px;
+    letter-spacing:-4px;
+  }
+
+  .controls{gap:7px}
+
+  .control-button{
+    padding:0 12px;
+    font-size:11px;
+  }
+
+  .start-button{min-width:100px}
+
+  .reset-button{
+    width:44px;
+    flex-basis:44px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app" id="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">FOCUS.</div>
+
+    <div class="mode-switch">
+      <button class="active" id="pomodoro-mode">Pomodoro</button>
+      <button id="clock-mode">Horloge</button>
+      <button id="exam-mode">Épreuve</button>
+    </div>
+
+    <div class="settings-wrapper" id="settings-wrapper">
+      <button class="settings-button" id="settings-toggle" title="Paramètres">⚙</button>
+
+      <div class="settings-panel" id="settings-panel">
+        <label>Travail (min)
+          <input type="number" id="work-input" min="1" max="180" value="25">
+        </label>
+
+        <label>Pause (min)
+          <input type="number" id="break-input" min="1" max="60" value="5">
+        </label>
+
+        <button class="save-settings" id="save-settings">Enregistrer</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- TIMER -->
+  <main class="timer-section" id="timer-section">
+    <div class="timer-label" id="timer-label">Concentration</div>
+
+    <div class="timer" id="timer">25:00</div>
+
+    <div class="timer-subtitle" id="timer-subtitle">
+      25 min de travail <span>•</span> 5 min de pause
+    </div>
+
+    <button class="exam-select-btn" id="exam-select-btn">
+      Choisir une épreuve　⌄
+    </button>
+
+    <div class="controls" id="timer-controls">
+      <button class="control-button start-button" id="start-button">Démarrer</button>
+      <button class="control-button secondary-button" id="skip-button">Skip ↠</button>
+      <button class="control-button secondary-button reset-button" id="reset-button" title="Réinitialiser">↻</button>
+    </div>
+  </main>
+
+  <!-- TASKS -->
+  <section class="tasks-section">
+    <div class="tasks-heading">
+      <h2>Liste de tâches</h2>
+      <span class="task-count" id="task-count">0 tâche</span>
+    </div>
+
+    <div class="add-task">
+      <input type="text" id="task-input" placeholder="Ajouter une tâche..." autocomplete="off">
+      <button id="add-task-button">Ajouter</button>
+    </div>
+
+    <ul class="task-list" id="task-list"></ul>
+  </section>
+</div>
+
+<!-- EXAM POPUP -->
+<div class="modal-overlay" id="exam-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Choisir une épreuve</h2>
+      <button class="modal-close" id="modal-close">×</button>
+    </div>
+
+    <div class="exam-search">
+      <input type="text" id="exam-search" placeholder="Rechercher une épreuve...">
+    </div>
+
+    <div class="exam-list" id="exam-list"></div>
+
+    <div class="modal-footer">
+      Sélectionne une épreuve pour régler le chronomètre
+    </div>
+  </div>
+</div>
+
+<script>
+
+/* =================================
+   EXAM DATA
+================================= */
+
+const exams = [
+  {name:"Français — écrit",duration:240},
+  {name:"Français — oral",duration:20},
+  {name:"Mathématiques anticipées (Première)",duration:120},
+  {name:"Philosophie",duration:240},
+  {name:"Grand oral",duration:20},
+  {name:"Mathématiques (spécialité)",duration:240},
+  {name:"Physique-chimie (écrit)",duration:210},
+  {name:"Physique-chimie (pratique)",duration:60},
+  {name:"SVT (écrit)",duration:210},
+  {name:"SVT (pratique)",duration:60},
+  {name:"SES",duration:240},
+  {name:"HGGSP",duration:240},
+  {name:"HLP",duration:240},
+  {name:"NSI (écrit)",duration:210},
+  {name:"NSI (pratique)",duration:60},
+  {name:"Sciences de l'ingénieur (écrit)",duration:210},
+  {name:"Sciences de l'ingénieur (pratique)",duration:60},
+  {name:"LLCER (écrit)",duration:210},
+  {name:"LLCER (oral)",duration:20},
+  {name:"Arts (écrit)",duration:210},
+  {name:"Arts (oral)",duration:30},
+  {name:"EPPCS (écrit)",duration:210},
+  {name:"EPPCS (oral)",duration:30},
+  {name:"LLCA",duration:240},
+  {name:"Biologie-écologie (écrit)",duration:210},
+  {name:"Biologie-écologie (pratique)",duration:90}
+];
+
+/* =================================
+   TIMER
+================================= */
+
+let workMinutes=25;
+let breakMinutes=5;
+
+let currentPhase="work";
+let timeLeft=workMinutes*60;
+let running=false;
+let timerInterval=null;
+let currentMode="pomodoro";
+let selectedExam=null;
+
+const $=id=>document.getElementById(id);
+
+const timerDisplay=$("timer");
+const timerLabel=$("timer-label");
+const timerSubtitle=$("timer-subtitle");
+const startButton=$("start-button");
+
+function formatTime(seconds){
+  const h=Math.floor(seconds/3600);
+  const m=Math.floor((seconds%3600)/60);
+  const s=seconds%60;
+
+  if(h>0){
+    return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  }
+
+  return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+}
+
+function updateTimerDisplay(){
+  timerDisplay.textContent=formatTime(timeLeft);
+
+  if(currentMode==="pomodoro"){
+    timerLabel.textContent=currentPhase==="work"?"Concentration":"Pause";
+    timerSubtitle.innerHTML=
+      `${workMinutes} min de travail <span>•</span> ${breakMinutes} min de pause`;
+    startButton.textContent=running?"Pause":"Démarrer";
+    $("skip-button").style.display="";
+
+    document.title=`${formatTime(timeLeft)} — FOCUS.`;
+  }
+
+  if(currentMode==="exam"){
+    timerLabel.textContent=running?"Épreuve en cours":"Épreuve";
+    timerSubtitle.textContent=selectedExam
+      ? `${selectedExam.name} · ${durationText(selectedExam.duration)}`
+      : "Choisis une épreuve";
+
+    startButton.textContent=running?"Pause":"Commencer";
+    $("skip-button").style.display="none";
+
+    document.title=`${formatTime(timeLeft)} — ${selectedExam?.name||"Épreuve"}`;
+  }
+}
+
+function clearTimer(){
+  clearInterval(timerInterval);
+  timerInterval=null;
+}
+
+function pauseTimer(){
+  running=false;
+  clearTimer();
+  updateTimerDisplay();
+}
+
+function startTimer(){
+  if(currentMode==="clock")return;
+  if(currentMode==="exam"&&!selectedExam)return;
+
+  if(running){
+    pauseTimer();
+    return;
+  }
+
+  running=true;
+  updateTimerDisplay();
+
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+
+    if(timeLeft<=0){
+      timeLeft=0;
+      running=false;
+      clearTimer();
+
+      if(currentMode==="pomodoro"){
+        switchPhase(true);
+        dingDong();
+      }else if(currentMode==="exam"){
+        updateTimerDisplay();
+        dingDong();
+      }
+    }
+
+    updateTimerDisplay();
+  },1000);
+}
+
+function resetTimer(){
+  pauseTimer();
+
+  if(currentMode==="exam"&&selectedExam){
+    timeLeft=selectedExam.duration*60;
+  }else{
+    currentPhase="work";
+    timeLeft=workMinutes*60;
+  }
+
+  updateTimerDisplay();
+}
+
+/* Skip only for Pomodoro */
+
+function skipPhase(){
+  if(currentMode!=="pomodoro")return;
+
+  pauseTimer();
+
+  currentPhase=currentPhase==="work"?"break":"work";
+  timeLeft=(currentPhase==="work"?workMinutes:breakMinutes)*60;
+
+  startTimer();
+}
+
+/* Phase switching */
+
+function switchPhase(autoStart){
+  clearTimer();
+
+  currentPhase=currentPhase==="work"?"break":"work";
+  timeLeft=(currentPhase==="work"?workMinutes:breakMinutes)*60;
+
+  running=false;
+  updateTimerDisplay();
+
+  if(autoStart){
+    startTimer();
+  }
+}
+
+/* =================================
+   DING DONG SOUND
+================================= */
+
+function dingDong(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+
+    const notes=[
+      {freq:660,time:0},
+      {freq:523,time:.36}
+    ];
+
+    notes.forEach(note=>{
+      const osc=ctx.createOscillator();
+      const gain=ctx.createGain();
+
+      osc.type="sine";
+      osc.frequency.value=note.freq;
+
+      gain.gain.setValueAtTime(0,ctx.currentTime+note.time);
+      gain.gain.linearRampToValueAtTime(.12,ctx.currentTime+note.time+.02);
+      gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+note.time+.3);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(ctx.currentTime+note.time);
+      osc.stop(ctx.currentTime+note.time+.32);
+    });
+  }catch(e){}
+}
+
+/* TIMER BUTTONS */
+
+startButton.addEventListener("click",startTimer);
+$("skip-button").addEventListener("click",skipPhase);
+$("reset-button").addEventListener("click",resetTimer);
+
+/* =================================
+   SETTINGS
+================================= */
+
+$("settings-toggle").onclick=()=>{
+  $("settings-panel").classList.toggle("open");
+};
+
+$("save-settings").onclick=()=>{
+  const w=parseInt($("work-input").value);
+  const b=parseInt($("break-input").value);
+
+  if(w>0&&b>0){
+    workMinutes=Math.min(180,w);
+    breakMinutes=Math.min(60,b);
+
+    if(!running){
+      timeLeft=(currentPhase==="work"?workMinutes:breakMinutes)*60;
+    }
+
+    $("settings-panel").classList.remove("open");
+    updateTimerDisplay();
+  }
+};
+
+document.addEventListener("click",e=>{
+  if(!$("settings-wrapper").contains(e.target)){
+    $("settings-panel").classList.remove("open");
+  }
+});
+
+/* =================================
+   MODE SWITCHING
+================================= */
+
+function setMode(mode){
+  currentMode=mode;
+  pauseTimer();
+
+  selectedExam=null;
+
+  $("app").classList.toggle("exam-mode",mode==="exam");
+  $("timer-section").classList.toggle("clock-mode",mode==="clock");
+
+  $("pomodoro-mode").classList.toggle("active",mode==="pomodoro");
+  $("clock-mode").classList.toggle("active",mode==="clock");
+  $("exam-mode").classList.toggle("active",mode==="exam");
+
+  $("timer-controls").style.display=mode==="clock"?"none":"flex";
+  $("settings-wrapper").style.display=mode==="pomodoro"?"block":"none";
+
+  if(mode==="pomodoro"){
+    currentPhase="work";
+    timeLeft=workMinutes*60;
+  }
+
+  if(mode==="exam"){
+    timeLeft=0;
+    timerLabel.textContent="Épreuve";
+    timerSubtitle.textContent="Choisis une épreuve";
+    timerDisplay.textContent="00:00";
+  }
+
+  if(mode==="clock"){
+    updateClock();
+  }else{
+    updateTimerDisplay();
+  }
+}
+
+$("pomodoro-mode").onclick=()=>setMode("pomodoro");
+$("clock-mode").onclick=()=>setMode("clock");
+$("exam-mode").onclick=()=>setMode("exam");
+
+/* =================================
+   CLOCK
+================================= */
+
+function updateClock(){
+  if(currentMode!=="clock")return;
+
+  const now=new Date();
+
+  timerDisplay.textContent=now.toLocaleTimeString("fr-FR",{
+    hour:"2-digit",
+    minute:"2-digit",
+    second:"2-digit"
+  });
+
+  timerLabel.textContent="Heure actuelle";
+
+  timerSubtitle.textContent=now.toLocaleDateString("fr-FR",{
+    weekday:"long",
+    day:"numeric",
+    month:"long"
+  });
+
+  document.title=timerDisplay.textContent+" — FOCUS.";
+}
+
+setInterval(updateClock,1000);
+
+/* =================================
+   EXAM POPUP
+================================= */
+
+const examModal=$("exam-modal");
+const examList=$("exam-list");
+const examSearch=$("exam-search");
+
+function durationText(minutes){
+  if(minutes>=60){
+    const h=Math.floor(minutes/60);
+    const m=minutes%60;
+    return `${h} h${m?` ${m} min`:""}`;
+  }
+  return `${minutes} min`;
+}
+
+function renderExams(filter=""){
+  examList.innerHTML="";
+
+  const filtered=exams.filter(ex=>
+    ex.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  filtered.forEach(ex=>{
+    const btn=document.createElement("button");
+    btn.className="exam-option";
+
+    btn.innerHTML=`
+      <span class="exam-name"></span>
+      <span class="exam-duration">${durationText(ex.duration)}</span>
+    `;
+
+    btn.querySelector(".exam-name").textContent=ex.name;
+
+    btn.onclick=()=>selectExam(ex);
+    examList.appendChild(btn);
+  });
+
+  if(!filtered.length){
+    examList.innerHTML='<div class="empty-state">Aucune épreuve trouvée.</div>';
+  }
+}
+
+function selectExam(ex){
+  selectedExam=ex;
+  currentMode="exam";
+
+  pauseTimer();
+
+  timeLeft=ex.duration*60;
+  currentPhase="work";
+
+  $("pomodoro-mode").classList.remove("active");
+  $("clock-mode").classList.remove("active");
+  $("exam-mode").classList.add("active");
+
+  $("app").classList.add("exam-mode");
+  $("timer-section").classList.remove("clock-mode");
+
+  $("timer-controls").style.display="flex";
+  $("settings-wrapper").style.display="none";
+
+  $("exam-select-btn").textContent=ex.name+"　⌄";
+
+  updateTimerDisplay();
+  examModal.classList.remove("open");
+}
+
+$("exam-select-btn").onclick=()=>{
+  renderExams();
+  examModal.classList.add("open");
+  examSearch.value="";
+  examSearch.focus();
+};
+
+$("modal-close").onclick=()=>examModal.classList.remove("open");
+
+examModal.addEventListener("click",e=>{
+  if(e.target===examModal)examModal.classList.remove("open");
+});
+
+examSearch.addEventListener("input",()=>{
+  renderExams(examSearch.value);
+});
+
+/* =================================
+   TASKS
+================================= */
+
+const taskInput=$("task-input");
+const taskList=$("task-list");
+const taskCount=$("task-count");
+
+let tasks=JSON.parse(localStorage.getItem("focusTasks")||"[]");
+let draggedTaskId=null;
+
+function saveTasks(){
+  localStorage.setItem("focusTasks",JSON.stringify(tasks));
+}
+
+function icon(type){
+  if(type==="edit"){
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 20h9"/>
+      <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/>
+    </svg>`;
+  }
+
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 6h18"/>
+    <path d="M8 6V4h8v2"/>
+    <path d="M19 6l-1 14H6L5 6"/>
+    <path d="M10 11v5M14 11v5"/>
+  </svg>`;
+}
+
+function renderTasks(){
+  taskList.innerHTML="";
+
+  const remaining=tasks.filter(t=>!t.completed).length;
+
+  taskCount.textContent=`${remaining} tâche${remaining>1?"s":""}`;
+
+  if(!tasks.length){
+    taskList.innerHTML='<div class="empty-state">Aucune tâche pour le moment.</div>';
+    saveTasks();
+    return;
+  }
+
+  tasks.forEach(task=>{
+    const li=document.createElement("li");
+
+    li.className="task-item"+(task.completed?" completed":"");
+    li.draggable=true;
+
+    li.innerHTML=`
+      <span class="drag-handle" title="Glisser pour réorganiser">⠿</span>
+      <input type="checkbox" class="task-checkbox" ${task.completed?"checked":""}>
+      <span class="task-text"></span>
+      <div class="task-actions">
+        <button class="task-action edit-task" title="Modifier">${icon("edit")}</button>
+        <button class="task-action delete-task" title="Supprimer">${icon("delete")}</button>
+      </div>
+    `;
+
+    li.querySelector(".task-text").textContent=task.text;
+
+    /* Check */
+    li.querySelector(".task-checkbox").onchange=e=>{
+      task.completed=e.target.checked;
+      saveTasks();
+      renderTasks();
+    };
+
+    /* Edit */
+    li.querySelector(".edit-task").onclick=()=>{
+      const value=prompt("Modifier la tâche :",task.text);
+
+      if(value!==null&&value.trim()){
+        task.text=value.trim();
+        saveTasks();
+        renderTasks();
+      }
+    };
+
+    /* Delete */
+    li.querySelector(".delete-task").onclick=()=>{
+      tasks=tasks.filter(t=>t.id!==task.id);
+      saveTasks();
+      renderTasks();
+    };
+
+    /* Drag & drop */
+    li.ondragstart=e=>{
+      draggedTaskId=task.id;
+      li.classList.add("dragging");
+      e.dataTransfer.effectAllowed="move";
+    };
+
+    li.ondragend=()=>{
+      draggedTaskId=null;
+      document.querySelectorAll(".task-item").forEach(item=>{
+        item.classList.remove("dragging","drag-over");
+      });
+    };
+
+    li.ondragover=e=>{
+      e.preventDefault();
+      if(task.id!==draggedTaskId){
+        li.classList.add("drag-over");
+      }
+    };
+
+    li.ondragleave=()=>{
+      li.classList.remove("drag-over");
+    };
+
+    li.ondrop=e=>{
+      e.preventDefault();
+      li.classList.remove("drag-over");
+
+      if(!draggedTaskId||draggedTaskId===task.id)return;
+
+      const from=tasks.findIndex(t=>t.id===draggedTaskId);
+      const to=tasks.findIndex(t=>t.id===task.id);
+
+      const moved=tasks.splice(from,1)[0];
+      tasks.splice(to,0,moved);
+
+      saveTasks();
+      renderTasks();
+    };
+
+    taskList.appendChild(li);
+  });
+
+  saveTasks();
+}
+
+function addTask(){
+  const text=taskInput.value.trim();
+  if(!text)return;
+
+  tasks.push({
+    id:Date.now().toString()+Math.random(),
+    text,
+    completed:false
+  });
+
+  taskInput.value="";
+  renderTasks();
+  taskInput.focus();
+}
+
+$("add-task-button").onclick=addTask;
+
+taskInput.onkeydown=e=>{
+  if(e.key==="Enter")addTask();
+};
+
+/* INIT */
+
+renderTasks();
+updateTimerDisplay();
+
+</script>
+</body>
+</html>
